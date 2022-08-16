@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaChaDotNet", "ChaChaDotNet\ChaChaDotNet.csproj", "{BC9A8173-845F-4EBC-AD60-8AE0FA001CA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaChaDotNetTests", "ChaChaDotNetTests\ChaChaDotNetTests.csproj", "{A42CD2D8-F65C-4BCF-9AD6-D2F453731A6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC9A8173-845F-4EBC-AD60-8AE0FA001CA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC9A8173-845F-4EBC-AD60-8AE0FA001CA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC9A8173-845F-4EBC-AD60-8AE0FA001CA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC9A8173-845F-4EBC-AD60-8AE0FA001CA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A42CD2D8-F65C-4BCF-9AD6-D2F453731A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A42CD2D8-F65C-4BCF-9AD6-D2F453731A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A42CD2D8-F65C-4BCF-9AD6-D2F453731A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A42CD2D8-F65C-4BCF-9AD6-D2F453731A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
