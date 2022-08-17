@@ -38,7 +38,7 @@ internal static class ChaCha
         if (nonce.Length != NonceSize) { throw new ArgumentOutOfRangeException(nameof(nonce), nonce.Length, $"{nameof(nonce)} must be {NonceSize} bytes long."); }
         if (key.Length != KeySize) { throw new ArgumentOutOfRangeException(nameof(key), key.Length, $"{nameof(key)} must be {KeySize} bytes long."); }
         if (rounds != 20 && rounds != 12 && rounds != 8) { throw new ArgumentOutOfRangeException(nameof(rounds), rounds, $"{nameof(rounds)} must be 20, 12, or 8."); }
-        int blockCount = (plaintext.Length + BlockSize - 1) / BlockSize;
+        int blockCount = (checked(plaintext.Length + BlockSize) - 1) / BlockSize;
         if (counter + blockCount > uint.MaxValue) { throw new CryptographicException("Counter overflow prevented."); }
         
         const uint j0 = 0x61707865;
