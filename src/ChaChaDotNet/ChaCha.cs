@@ -45,18 +45,18 @@ internal static class ChaCha
         const uint j1 = 0x3320646e;
         const uint j2 = 0x79622d32;
         const uint j3 = 0x6b206574;
-        uint j4 = ReadUInt32LittleEndian(key[..4]);
-        uint j5 = ReadUInt32LittleEndian(key[4..8]);
-        uint j6 = ReadUInt32LittleEndian(key[8..12]);
-        uint j7 = ReadUInt32LittleEndian(key[12..16]);
-        uint j8 = ReadUInt32LittleEndian(key[16..20]);
-        uint j9 = ReadUInt32LittleEndian(key[20..24]);
-        uint j10 = ReadUInt32LittleEndian(key[24..28]);
-        uint j11 = ReadUInt32LittleEndian(key[28..32]);
+        uint j4 = ReadUInt32LittleEndian(key, offset: 0);
+        uint j5 = ReadUInt32LittleEndian(key, offset: 4);
+        uint j6 = ReadUInt32LittleEndian(key, offset: 8);
+        uint j7 = ReadUInt32LittleEndian(key, offset: 12);
+        uint j8 = ReadUInt32LittleEndian(key, offset: 16);
+        uint j9 = ReadUInt32LittleEndian(key, offset: 20);
+        uint j10 = ReadUInt32LittleEndian(key, offset: 24);
+        uint j11 = ReadUInt32LittleEndian(key, offset: 28);
         uint j12 = counter;
-        uint j13 = ReadUInt32LittleEndian(nonce[..4]);
-        uint j14 = ReadUInt32LittleEndian(nonce[4..8]);
-        uint j15 = ReadUInt32LittleEndian(nonce[8..12]);
+        uint j13 = ReadUInt32LittleEndian(nonce, offset: 0);
+        uint j14 = ReadUInt32LittleEndian(nonce, offset: 4);
+        uint j15 = ReadUInt32LittleEndian(nonce, offset: 8);
         var x = new uint[16];
         
         int index = 0;
@@ -109,20 +109,20 @@ internal static class ChaCha
             
             if (bytesRemaining >= BlockSize) {
                 for (int j = 0; j < x.Length; j++) {
-                    x[j] ^= ReadUInt32LittleEndian(plaintext.Slice(index, UIntSize));
-                    WriteUInt32LittleEndian(ciphertext.Slice(index, UIntSize), x[j]);
+                    x[j] ^= ReadUInt32LittleEndian(plaintext, index);
+                    WriteUInt32LittleEndian(ciphertext, index, x[j]);
                     index += UIntSize;
                 }
                 bytesRemaining -= BlockSize;
             }
             else {
-                int startIndex = 0;
+                int offset = 0;
                 Span<byte> lastBlock = stackalloc byte[BlockSize];
-                plaintext.Slice(plaintext.Length - bytesRemaining, bytesRemaining).CopyTo(lastBlock);
-                for (int j = 0; j < (bytesRemaining + UIntSize - 1) / UIntSize; j++) {
-                    x[j] ^= ReadUInt32LittleEndian(lastBlock.Slice(startIndex, UIntSize));
-                    WriteUInt32LittleEndian(lastBlock.Slice(startIndex, UIntSize), x[j]);
-                    startIndex += UIntSize;
+                plaintext[^bytesRemaining..].CopyTo(lastBlock);
+                for (int j = 0; j < x.Length; j++) {
+                    x[j] ^= ReadUInt32LittleEndian(lastBlock, offset);
+                    WriteUInt32LittleEndian(lastBlock, offset, x[j]);
+                    offset += UIntSize;
                 }
                 for (int j = 0; j < bytesRemaining; j++) {
                     ciphertext[index++] = lastBlock[j];
@@ -134,9 +134,9 @@ internal static class ChaCha
         return j12;
     }
     
-    private static uint ReadUInt32LittleEndian(ReadOnlySpan<byte> source)
+    private static uint ReadUInt32LittleEndian(ReadOnlySpan<byte> source, int offset)
     {
-        return source[0] | (uint) source[1] << 8 | (uint) source[2] << 16 | (uint) source[3] << 24;
+        return source[offset] | (uint) source[offset + 1] << 8 | (uint) source[offset + 2] << 16 | (uint) source[offset + 3] << 24;
     }
     
     private static (uint a, uint b, uint c, uint d) QuarterRound(uint a, uint b, uint c, uint d)
@@ -161,11 +161,11 @@ internal static class ChaCha
         return (a << b) ^ (a >> (32 - b));
     }
     
-    private static void WriteUInt32LittleEndian(Span<byte> destination, uint value)
+    private static void WriteUInt32LittleEndian(Span<byte> destination, int offset, uint value)
     {
-        destination[0] = (byte) value;
-        destination[1] = (byte) (value >> 8);
-        destination[2] = (byte) (value >> 16);
-        destination[3] = (byte) (value >> 24);
+        destination[offset] = (byte) value;
+        destination[offset + 1] = (byte) (value >> 8);
+        destination[offset + 2] = (byte) (value >> 16);
+        destination[offset + 3] = (byte) (value >> 24);
     }
 }
